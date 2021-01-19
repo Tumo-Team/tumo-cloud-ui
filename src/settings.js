@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Ant Design Vue Pro',
+  title: 'Tumo Cloud',
 
   // 是否展示左侧设置按钮
   showSettings: true,
