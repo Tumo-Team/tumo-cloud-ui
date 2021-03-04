@@ -1,46 +1,56 @@
 import axios from 'axios'
-import { Modal, message } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
-// create an axios instance
 const service = axios.create({
   // process.env是从当前env中获取 // 在vue-cli中，可以在项目根目录设置`.env.xxx`来设置这个参数值
   baseURL: process.env.VUE_APP_BASE_API,
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 5000
 })
 
-// request interceptor
+/**
+ * 全局request拦截器
+ */
 service.interceptors.request.use(
   config => {
     // 在请求之前拦截，判断store中是否存储了token
     if (store.getters.token) {
       // 如果存储了token，就将token设置在request header中，保证每次发送request，header中都包含token
-      config.headers['Authorization'] = getToken()
+      config.headers['Authorization'] = 'Bearer ' + getToken()
     }
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    console.log(error)
     return Promise.reject(error)
   }
 )
 
-// response interceptor
+/**
+ * 全局response拦截器
+ */
 service.interceptors.response.use(
-  /**
-   *  response format：
-   *  {
-   *    "code": "200",
-   *    "data": {},
-   *    "msg": "success"
-   *  }
-   *  如果response format不是上述，请自行修改下方：`res.code`、`res.data`、`res.msg`
-   */
   response => {
     const res = response.data
+
+    // 对特殊响应格式的处理，比如OAuth响应或者流文件响应
+    if (!(res instanceof Object) || res.code === undefined) {
+      return res
+    }
+
+    // 针对Security OAuth异常做特殊处理
+    if (response.status === 401 || response.status === 403) {
+      Modal.warning({
+        title: 'Confirm logout',
+        content: 'Token已失效，请重新登录',
+        okText: '重新登录',
+        cancelText: 'Cancel',
+        onOk: () => {
+          store.dispatch('user/logoutSession')
+        }
+      })
+    }
 
     // 根据response code判断请求是否成功
     if (res.code !== 200) {
@@ -48,33 +58,18 @@ service.interceptors.response.use(
         res.msg || 'Error',
         4
       )
-
-      // 对特殊的code自定义处理
-      if (res.code === 401 || res.code === 403) {
-        // 重新登录
-        Modal.warning({
-          title: 'Confirm logout',
-          content: 'You have been logged out, you can cancel to stay on this page, or log in again',
-          okText: 'Re-Login',
-          cancelText: 'Cancle',
-          onOk: () => {
-            store.dispatch('user/resetToken').then(() => {
-              location.reload()
-            })
-          }
-        })
-      }
       return Promise.reject(new Error(res.msg || 'Error'))
     } else {
       return res
     }
   },
   error => {
-    console.log('err' + error) // for debug
-    message.error(
-      error.message,
-      4
-    )
+    const data = error.response.data
+    if (data instanceof Object) {
+      message.error(data.msg ? data.msg : data.message, 4)
+    } else {
+      message.error('网络连接异常，请稍后重试')
+    }
     return Promise.reject(error)
   }
 )

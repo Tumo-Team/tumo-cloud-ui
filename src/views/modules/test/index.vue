@@ -1,12 +1,10 @@
 <template>
-  <div class="app-container">
-    <h1>Safe Set</h1>
-  </div>
+  <h1>This Test Page</h1>
 </template>
 
 <script>
 export default {
-  name: 'BaseSet'
+  name: 'Test'
 }
 </script>
 

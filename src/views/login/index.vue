@@ -2,10 +2,10 @@
   <div class="login-container">
     <div class="login-weaper animated bounceInDown">
       <div class="login-logo">
-        <svg-icon icon-class="logo" style="width: 74px;height: 77px;" />
+        <svg-icon icon-class="tumo-team" style="width: 74px;height: 77px;" />
       </div>
       <div class="login-tip">
-        Tumo Cloud Login
+        Tumo Boot
       </div>
       <div class="login-border">
         <div class="login-main">
@@ -33,9 +33,21 @@
                 <a-icon slot="prefix" type="lock" />
               </a-input-password>
             </a-form-model-item>
+            <a-form-model-item prop="captcha">
+              <a-input v-model="form.captcha" placeholder="Captcha" style="display: inline-block;width: 50%;padding-right: 20px;">
+                <a-icon slot="prefix" type="security-scan" />
+              </a-input>
+              <a-tooltip placement="bottom">
+                <template slot="title">
+                  <span>点击更换验证码</span>
+                </template>
+                <img :src="'data:image/png;base64,' + captchaUrl" @click="handleCaptcha">
+              </a-tooltip>
+            </a-form-model-item>
 
             <a-form-model-item>
               <a-button
+                :loading="loading"
                 type="primary"
                 class="login-submit"
                 @click.native.prevent="handleLogin"
@@ -50,39 +62,29 @@
 </template>
 
 <script>
+import { getCaptcha } from '@/api/auth'
+
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input username'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('Please input password'))
-      } else {
-        callback()
-      }
-    }
     return {
       form: {
-        username: 'admin',
-        password: '111111'
+        username: 'tumo-boot',
+        password: 'tycoding'
       },
       rules: {
         username: [
-          { required: true, trigger: 'blur', validator: validateUsername }
+          { required: true, trigger: 'blur', message: '请输入用户名' }
         ],
         password: [
-          { required: true, trigger: 'blur', validator: validatePassword }
+          { required: true, trigger: 'blur', message: '请输入密码' }
+        ],
+        captcha: [
+          { required: true, trigger: 'blur', message: '请输入验证码' }
         ]
       },
-      capsTooltip: false,
+      captchaUrl: null,
       loading: false,
-      showDialog: false,
       redirect: undefined,
       otherQuery: {}
     }
@@ -106,10 +108,15 @@ export default {
       this.$refs.password.focus()
     }
   },
+  created() {
+    this.handleCaptcha()
+  },
   methods: {
-    checkCapslock(e) {
-      const { key } = e
-      this.capsTooltip = key && key.length === 1 && key >= 'A' && key <= 'Z'
+    handleCaptcha() {
+      getCaptcha().then(res => {
+        this.captchaUrl = res.data.image
+        this.form.captcha_key = res.data.key
+      })
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
@@ -122,13 +129,19 @@ export default {
                 path: this.redirect || '/',
                 query: this.otherQuery
               })
+              this.$notification['success']({
+                message: '登录成功',
+                description: '欢迎登录 Tumo-Boot'
+              })
               this.loading = false
             })
             .catch(() => {
+              this.handleCaptcha()
+              this.form.captcha = ''
               this.loading = false
             })
         } else {
-          console.log('error submit!!')
+          console.apiLog('error submit!!')
           return false
         }
       })
@@ -245,17 +258,6 @@ img {
   float: left;
 }
 
-.login-border, .login-left {
-  padding: 20px 0 40px 0;
-  position: relative;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
 .login-main {
   margin: 0 auto;
 }
@@ -264,10 +266,6 @@ img {
   width: 100%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-}
-
-.login-form {
-  margin: 10px 0;
 }
 
 .login-title {

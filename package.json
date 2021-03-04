@@ -1,16 +1,15 @@
 {
-  "name": "tumo-cloud-ui",
-  "version": "4.3.1",
+  "name": "Tumo-Cloud-UI",
+  "version": "4.4.0",
   "description": "based on ant-design-vue & vue-element-admin",
   "author": "TyCoding",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build:prod": "vue-cli-service build",
-    "build:stage": "vue-cli-service build --mode staging",
+    "build": "vue-cli-service build",
+    "build:docker": "vue-cli-service build --dest='./docker/dist/'",
     "preview": "node build/index.js --preview",
-    "lint": "eslint --ext .js,.vue src",
-    "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
+    "lint": "eslint --ext .js,.vue src"
   },
   "husky": {
     "hooks": {

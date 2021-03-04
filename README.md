@@ -7,12 +7,44 @@
     </a>
 </p>
 
-# Tumo Cloud 微服务项目前端
+# Tumo Cloud UI
 
-> 一套基于SpringCloud2020.0 & SpringBoot2.4.1 的微服务脚手架  :rocket:
+## Docs
 
-**项目后端源码：[https://github.com/Tumo-Cloud/Tumo-Cloud](https://github.com/Tumo-Cloud/Tumo-Cloud)**
+项目正在完善中...
 
-**项目正在完善中...**
+## Getting started
 
-欢迎star,fork关注
+```bash
+# clone the project
+git clone https://github.com/Tumo-Team/Tumo-Cloud-UI.git
+
+# enter the project directory
+cd Tumo-Cloud-UI
+
+# install dependency
+npm install
+
+# develop
+npm run serve
+```
+
+This will automatically open http://localhost:9527
+
+## Build
+
+```bash
+# build for test environment
+npm run build:stage
+
+# build for production environment
+npm run build:prod
+```
+
+## Preview
+
+## License
+
+[MIT](https://github.com/Tumo-Team/Tumo-Cloud/blob/master/LICENSE)
+
+Copyright (c) 2021-present TyCoding

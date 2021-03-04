@@ -1,42 +1,41 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo } from '@/api/auth'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import router, { resetRouter } from '@/router'
+import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',
-  avatar: '',
-  introduction: '',
-  roles: []
+  user: {},
+  dept: {},
+  roles: [],
+  permissions: []
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
   },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
+  SET_USER: (state, user) => {
+    state.user = user
   },
-  SET_NAME: (state, name) => {
-    state.name = name
-  },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar
+  SET_DEPT: (state, dept) => {
+    state.dept = dept
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_PERMISSIONS: (state, permissions) => {
+    state.permissions = permissions
   }
 }
 
 const actions = {
-  // user login
+  // 用户登录
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, captcha, captcha_key } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+      login(username.trim(), password, captcha, captcha_key).then(res => {
+        commit('SET_TOKEN', res.access_token)
+        setToken(res.access_token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -44,27 +43,23 @@ const actions = {
     })
   },
 
-  // get user info
-  getInfo({ commit, state }) {
+  // 获取登录用户信息
+  getInfo({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
-
+      getInfo().then(res => {
+        const data = res.data
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('获取用户信息失败')
         }
 
-        const { roles, name, avatar, introduction } = data
-
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+        if (!data.roles || data.roles.length <= 0) {
+          reject('没有查询到用户角色')
         }
 
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
+        commit('SET_USER', data.user)
+        commit('SET_DEPT', data.dept)
+        commit('SET_ROLES', data.roles)
+        commit('SET_PERMISSIONS', data.permissions)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -72,12 +67,15 @@ const actions = {
     })
   },
 
-  // user logout
-  logout({ commit, state, dispatch }) {
+  // 注销登录
+  logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         commit('SET_TOKEN', '')
+        commit('SET_USER', {})
+        commit('SET_DEPT', {})
         commit('SET_ROLES', [])
+        commit('SET_PERMISSIONS', [])
         removeToken()
         resetRouter()
         resolve()
@@ -87,37 +85,15 @@ const actions = {
     })
   },
 
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
+  // 401请求清除Session信息
+  logoutSession({ commit }) {
+    return new Promise((resolve, reject) => {
       commit('SET_TOKEN', '')
+      commit('SET_USER', {})
+      commit('SET_DEPT', {})
       commit('SET_ROLES', [])
+      commit('SET_PERMISSIONS', [])
       removeToken()
-      resolve()
-    })
-  },
-
-  // dynamically modify permissions
-  changeRoles({ commit, dispatch }, role) {
-    return new Promise(async resolve => {
-      const token = role + '-token'
-
-      commit('SET_TOKEN', token)
-      setToken(token)
-
-      const { roles } = await dispatch('getInfo')
-
-      resetRouter()
-
-      // generate accessible routes map based on roles
-      const accessRoutes = await dispatch('permission/generateRoutes', roles, { root: true })
-
-      // dynamically add accessible routes
-      router.addRoutes(accessRoutes)
-
-      // reset visited views and cached views
-      // dispatch('tagsView/delAllViews', null, { root: true })
-
       resolve()
     })
   }
