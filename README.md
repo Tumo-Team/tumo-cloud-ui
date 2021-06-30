@@ -1,50 +1,39 @@
-<p align="center">
-    <img src="http://cdn.tycoding.cn/MIK-WxRzP9.png" />
-</p>
-<p align="center">
-    <a href="https://github.com/Tumo-Team" target="_blank">
-        <strong>Tumo Team —— Tumo-Cloud</strong>
-    </a>
-</p>
+<div align="center"> <a href="https://github.com/anncwb/vue-vben-admin"> <img alt="VbenAdmin Logo" width="200" height="200" src="https://anncwb.github.io/anncwb/images/logo.png"> </a> <br> <br>
 
-# Tumo Cloud UI
+[![license](https://img.shields.io/github/license/anncwb/vue-vben-admin.svg)](LICENSE)
 
-## Docs
+<h1>Tumo Boot UI</h1>
+</div>
 
-项目正在完善中...
+## Introduction
 
-## Getting started
+基于 [vben-admin-thin-next](https://github.com/anncwb/vben-admin-thin-next)
+
+## Install and use
+
+- Get the project code
 
 ```bash
-# clone the project
-git clone https://github.com/Tumo-Team/Tumo-Cloud-UI.git
-
-# enter the project directory
-cd Tumo-Cloud-UI
-
-# install dependency
-npm install
-
-# develop
-npm run serve
+git clone https://github.com/anncwb/vue-vben-admin.git
 ```
 
-This will automatically open http://localhost:9527
-
-## Build
+- Installation dependencies
 
 ```bash
-# build for test environment
-npm run build:stage
+cd vue-vben-admin
 
-# build for production environment
-npm run build:prod
+yarn install
+
 ```
 
-## Preview
+- run
 
-## License
+```bash
+yarn serve
+```
 
-[MIT](https://github.com/Tumo-Team/Tumo-Cloud/blob/master/LICENSE)
+- build
 
-Copyright (c) 2021-present TyCoding
+```bash
+yarn build
+```
