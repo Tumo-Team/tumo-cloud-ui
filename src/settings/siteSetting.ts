@@ -1,5 +1,5 @@
 // github repo url
-export const GITHUB_URL = 'https://github.com/tumo-team/tumo-boot';
+export const GITHUB_URL = 'https://github.com/tumo-team/tumo-cloud';
 
 // site docs
 export const DOC_URL = 'http://docs.boot.tycoding.cn';

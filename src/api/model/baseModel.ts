@@ -3,7 +3,7 @@
  */
 export const ApiPrefix = {
   // 基础接口前缀
-  BASIC_PREFIX: '/tumo-boot',
+  BASIC_PREFIX: '/tumo-cloud',
   // Auth服务接口前缀
   AUTH_PREFIX: '/auth',
   // Upms服务接口前缀
