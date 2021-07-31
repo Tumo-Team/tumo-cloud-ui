@@ -134,9 +134,9 @@ export const useUserStore = defineStore({
     /**
      * @description: logout
      */
-    async logout(goLogin = false) {
+    logout(goLogin = false) {
       try {
-        await logoutApi();
+        logoutApi();
       } catch {
         console.log('注销Token失败');
       }

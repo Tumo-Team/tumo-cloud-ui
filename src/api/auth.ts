@@ -3,12 +3,12 @@ import { ApiPrefix } from '/@/api/model/baseModel';
 import { LoginParams, LoginResultModel } from '/@/api/model/userModel';
 import { ErrorMessageMode } from '/#/axios';
 
-const Api = {
+export const Api = {
   Login: `${ApiPrefix.AUTH_PREFIX}/oauth/token`,
-  GetCaptcha: `${ApiPrefix.AUTH_PREFIX}/captcha`,
+  GetCaptcha: `${ApiPrefix.AUTH_PREFIX}/token/captcha`,
   GetUserInfo: `${ApiPrefix.UPMS_PREFIX}/user/info`,
   BuildMenu: `${ApiPrefix.UPMS_PREFIX}/menu/build`,
-  Logout: `${ApiPrefix.AUTH_PREFIX}/logout`,
+  Logout: `${ApiPrefix.AUTH_PREFIX}/token/logout`,
 };
 
 /**
