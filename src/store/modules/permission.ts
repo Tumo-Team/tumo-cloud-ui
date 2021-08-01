@@ -189,7 +189,7 @@ export const usePermissionStore = defineStore({
             routeList = (await buildMenu()) as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
-            userStore.logout();
+            userStore.logout(true);
           }
 
           // Dynamically introduce components
