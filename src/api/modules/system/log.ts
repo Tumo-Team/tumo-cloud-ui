@@ -2,8 +2,8 @@ import { defHttp } from '/@/utils/http/axios';
 import { ApiPrefix } from '/@/api/model/baseModel';
 
 const Api = {
-  LogPage: `${ApiPrefix.RESOURCE_PREFIX}/log/page`,
-  BasicApi: `${ApiPrefix.RESOURCE_PREFIX}/log`,
+  LogPage: `${ApiPrefix.UPMS_PREFIX}/log/page`,
+  BasicApi: `${ApiPrefix.UPMS_PREFIX}/log`,
 };
 
 /**

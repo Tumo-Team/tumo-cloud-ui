@@ -173,16 +173,18 @@ const transform: AxiosTransform = {
           createMessage.error('获取用户信息失败，请联系管理员！');
           // 手动清除缓存，避免多次登录 污染Authorization请求头
           clearAuthCache(true);
+          return Promise.reject(error);
         }
         if (config.url.indexOf(Api.BuildMenu) > 0) {
           createMessage.error('加载权限菜单失败，请联系管理员！');
           clearAuthCache(true);
+          return Promise.reject(error);
         }
         if (config.url.indexOf(Api.GetCaptcha) > 0) {
           createMessage.error('获取验证码失败，请联系管理员！');
           clearAuthCache(true);
+          return Promise.reject(error);
         }
-        return Promise.reject(error);
       }
       if (response.status === 403 || response.status == 401) {
         // 无权限，或请求失败
@@ -191,7 +193,6 @@ const transform: AxiosTransform = {
       if (err?.includes('Network Error')) {
         errMessage = t('sys.api.networkExceptionMsg');
       }
-
       if (errMessage) {
         if (errorMessageMode === 'modal') {
           createErrorModal({ title: t('sys.api.errorTip'), content: errMessage });
@@ -203,7 +204,6 @@ const transform: AxiosTransform = {
     } catch (error) {
       throw new Error(error);
     }
-
     checkStatus(error?.response?.status, msg, errorMessageMode);
     return Promise.reject(error);
   },
