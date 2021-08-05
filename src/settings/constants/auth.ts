@@ -35,7 +35,6 @@ const Auth = {
       delete: 'system:oss:delete',
     },
     token: {
-      info: 'system:token:info',
       delete: 'system:token:delete',
     },
   },

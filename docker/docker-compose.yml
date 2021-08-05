@@ -1,11 +1,20 @@
-version: "3.5"
+version: '3.5'
 
 services:
-  tumo-boot-ui:
-    image: tumo-boot-ui
+  tumo-cloud-ui:
+    image: tumo-cloud-ui
     build:
       context: .
     restart: always
-    container_name: tumo-boot-ui
+    container_name: tumo-cloud-ui
     ports:
-      - 8011:80
+      - 9000:80
+    networks:
+      - tumo_cloud_net
+
+networks:
+  tumo_cloud_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

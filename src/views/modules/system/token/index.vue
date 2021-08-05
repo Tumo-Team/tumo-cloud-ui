@@ -5,11 +5,6 @@
         <TableAction
           :actions="[
             {
-              auth: Auth.system.token.info,
-              icon: 'carbon-view-filled',
-              onClick: handleInfo.bind(null, record),
-            },
-            {
               auth: Auth.system.token.delete,
               icon: 'ant-design:delete-outlined',
               color: 'error',
@@ -22,26 +17,23 @@
         />
       </template>
     </BasicTable>
-    <InfoModal @register="registerDrawer" />
   </div>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
   import { getTokenPage, deleteToken } from '/@/api/modules/system/token';
-  import Auth from '/@/utils/constants/auth';
+  import Auth from '/@/settings/constants/auth';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-
-  import InfoModal from './InfoModal.vue';
 
   import { columns, searchFormSchema } from './data';
   import { useDrawer } from '/@/components/Drawer';
 
   export default defineComponent({
     name: 'Index',
-    components: { BasicTable, InfoModal, TableAction },
+    components: { BasicTable, TableAction },
     setup() {
-      const [registerDrawer, { openDrawer }] = useDrawer();
+      const [registerDrawer] = useDrawer();
       const [registerTable, { reload }] = useTable({
         title: '日志列表',
         api: getTokenPage,
@@ -67,14 +59,9 @@
         reload();
       }
 
-      function handleInfo(record: any) {
-        openDrawer(true, record);
-      }
-
       return {
         registerTable,
         registerDrawer,
-        handleInfo,
         handleDelete,
         Auth,
       };

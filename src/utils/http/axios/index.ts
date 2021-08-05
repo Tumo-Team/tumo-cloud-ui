@@ -186,10 +186,6 @@ const transform: AxiosTransform = {
           return Promise.reject(error);
         }
       }
-      if (response.status === 403 || response.status == 401) {
-        // 无权限，或请求失败
-        errMessage = t('sys.api.apiRequestFailed');
-      }
       if (err?.includes('Network Error')) {
         errMessage = t('sys.api.networkExceptionMsg');
       }

@@ -21,7 +21,7 @@
   import { Button, Upload, Row, Col } from 'ant-design-vue';
   import { defineComponent, onMounted, ref } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { CollapseContainer } from '/@/components/Container/index';
+  import { CollapseContainer } from '/@/components/Container';
   import Icon from '/@/components/Icon/index';
 
   import { getToken } from '/@/utils/auth';

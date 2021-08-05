@@ -1,6 +1,5 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-import { DescItem } from '/@/components/Description';
 
 export const columns: BasicColumn[] = [
   {
@@ -29,28 +28,5 @@ export const searchFormSchema: FormSchema[] = [
     label: '用户名',
     component: 'Input',
     colProps: { span: 8 },
-  },
-];
-
-export const infoSchema: DescItem[] = [
-  {
-    field: 'username',
-    label: '用户名',
-  },
-  {
-    field: 'value',
-    label: 'Token令牌',
-  },
-  {
-    field: 'tokenType',
-    label: '令牌类型',
-  },
-  {
-    field: 'expiration',
-    label: '过期时间',
-  },
-  {
-    field: 'scope',
-    label: 'Scope',
   },
 ];
