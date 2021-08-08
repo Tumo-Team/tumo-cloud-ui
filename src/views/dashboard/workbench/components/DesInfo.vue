@@ -5,18 +5,19 @@
         <CollapsePanel key="1" header="项目信息">
           <List>
             <ListItem>
-              <b>项目介绍：</b>一套基于SpringBoot2.4.x 和 Vue3.x & TypeScript
+              <b>项目介绍：</b>一套基于SpringCloud Alibaba 和 Vue3.x & TypeScript
               的基础RBAC权限项目模板。
             </ListItem>
             <ListItem style="display: block">
               <b>项目文档：</b>
-              <a href="http://docs.boot.tycoding.cn" target="_blank"
-                >http://docs.boot.tycoding.cn</a
+              <a href="http://docs.cloud.tycoding.cn" target="_blank"
+                >http://docs.cloud.tycoding.cn</a
               >
             </ListItem>
             <ListItem style="display: block">
               <b>后端技术：</b>
-              <Tag color="green">SpringBoot2.4.x</Tag>
+              <Tag color="green">SpringCloud Alibaba</Tag>
+              <Tag color="green">SpringBoot2.5.x</Tag>
               <Tag color="green">MybatisPlus</Tag>
               <Tag color="green">SpringSecurity</Tag>
             </ListItem>

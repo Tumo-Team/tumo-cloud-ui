@@ -2,25 +2,26 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button v-auth="Auth.upms.menu.add" type="primary" @click="handleCreate">
-          新增菜单
+        <a-button v-auth="Auth.system.dict.add" type="primary" @click="handleCreate">
+          新增字典
         </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              auth: Auth.upms.menu.add,
-              icon: 'ant-design:plus-outlined',
-              onClick: handleAddChild.bind(null, record.id),
+              auth: Auth.system.dict.update,
+              icon: 'clarity:bullet-list-line',
+              onClick: handleInfo.bind(null, record.id),
             },
             {
-              auth: Auth.upms.menu.update,
+              auth: Auth.system.dict.update,
               icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record.id),
             },
             {
-              auth: Auth.upms.menu.delete,
+              auth: Auth.system.dict.delete,
+              disabled: record.isSystem,
               icon: 'ant-design:delete-outlined',
               color: 'error',
               popConfirm: {
@@ -32,72 +33,73 @@
         />
       </template>
     </BasicTable>
-    <FormModal @register="registerDrawer" @success="handleSuccess" />
+    <FormModal @register="registerModal" @success="handleSuccess" />
+    <ItemModal @register="registerDrawer" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-
-  import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getMenuTree, deleteMenu } from '/@/api/modules/upms/menu';
+  import { getDictPage, deleteDict } from '/@/api/modules/system/dict';
   import Auth from '/@/settings/constants/auth';
 
+  import { BasicTable, useTable, TableAction } from '/@/components/Table';
+
+  import { useModal } from '/@/components/Modal';
   import { useDrawer } from '/@/components/Drawer';
   import FormModal from './FormModal.vue';
 
+  import ItemModal from './ItemModal.vue';
   import { columns, searchFormSchema } from './data';
 
   export default defineComponent({
     name: 'Index',
-    components: { BasicTable, FormModal, TableAction },
+    components: { BasicTable, FormModal, ItemModal, TableAction },
     setup() {
+      const [registerModal, { openModal }] = useModal();
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload }] = useTable({
-        title: '菜单列表',
-        api: getMenuTree,
+        title: '字典列表',
+        api: getDictPage,
         columns,
         formConfig: {
           labelWidth: 120,
           schemas: searchFormSchema,
         },
-        pagination: false,
-        striped: false,
         useSearchForm: true,
         showTableSetting: true,
-        bordered: true,
         showIndexColumn: false,
+        bordered: true,
         tableSetting: { fullScreen: true },
         actionColumn: {
-          width: 120,
+          width: 110,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
-          fixed: undefined,
         },
       });
 
       function handleCreate() {
-        openDrawer(true, {
+        openModal(true, {
           isUpdate: false,
         });
       }
 
       function handleEdit(id: string | number) {
-        openDrawer(true, {
+        openModal(true, {
           id,
           isUpdate: true,
         });
       }
 
-      function handleAddChild(id: string | number) {
+      function handleInfo(id: string | number) {
         openDrawer(true, {
-          parentId: id,
+          id,
           isUpdate: false,
         });
       }
 
       async function handleDelete(id: string | number) {
-        await deleteMenu(id);
+        await deleteDict(id);
         reload();
       }
 
@@ -107,11 +109,12 @@
 
       return {
         registerTable,
+        registerModal,
         registerDrawer,
         handleCreate,
         handleEdit,
-        handleAddChild,
         handleDelete,
+        handleInfo,
         handleSuccess,
         Auth,
       };

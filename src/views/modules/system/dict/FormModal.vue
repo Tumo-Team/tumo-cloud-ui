@@ -8,8 +8,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './data';
-
-  import { getDeptTree, getDept, addDept, updateDept } from '/@/api/modules/upms/dept';
+  import { getDict, updateDict, addDict } from '/@/api/modules/system/dict';
   import { isNullOrUnDef } from '/@/utils/is';
 
   export default defineComponent({
@@ -19,10 +18,13 @@
     setup(_, { emit }) {
       const isUpdate = ref(true);
 
-      const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
+      const [registerForm, { setFieldsValue, resetFields, validate }] = useForm({
         labelWidth: 100,
         schemas: formSchema,
         showActionButtonGroup: false,
+        actionColOptions: {
+          span: 23,
+        },
       });
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
@@ -31,25 +33,15 @@
         isUpdate.value = !!data?.isUpdate;
 
         if (unref(isUpdate)) {
-          const dept = await getDept(data.id);
-          data.parentId = dept.parentId;
+          const dict = await getDict(data.id);
+          dict.isSystem = String(dict.isSystem);
           setFieldsValue({
-            ...dept,
+            ...dict,
           });
         }
-        // 过滤parentId
-        setFieldsValue({
-          parentId: data.parentId == 0 ? null : data.parentId,
-        });
-
-        const treeData = await getDeptTree();
-        updateSchema({
-          field: 'parentId',
-          componentProps: { treeData },
-        });
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增部门' : '编辑部门'));
+      const getTitle = computed(() => (!unref(isUpdate) ? '新增字典' : '编辑字典'));
 
       async function handleSubmit() {
         try {
@@ -57,10 +49,10 @@
           setModalProps({ confirmLoading: true });
           if (isNullOrUnDef(values.id)) {
             // 新增
-            await addDept(values);
+            await addDict(values);
           } else {
             // 修改
-            await updateDept(values);
+            await updateDict(values);
           }
           closeModal();
           emit('success');

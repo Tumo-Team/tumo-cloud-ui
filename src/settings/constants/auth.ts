@@ -37,6 +37,16 @@ const Auth = {
     token: {
       delete: 'system:token:delete',
     },
+    dict: {
+      add: 'system:dict:add',
+      update: 'system:dict:update',
+      delete: 'system:dict:delete',
+    },
+    dictItem: {
+      add: 'system:dict:item:add',
+      update: 'system:dict:item:update',
+      delete: 'system:dict:item:delete',
+    },
   },
 };
 

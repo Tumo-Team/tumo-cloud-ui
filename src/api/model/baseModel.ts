@@ -8,6 +8,8 @@ export const ApiPrefix = {
   AUTH_PREFIX: '/auth',
   // Upms服务接口前缀
   UPMS_PREFIX: '/upms',
+  // Resource服务接口前缀
+  RESOURCE_PREFIX: '/resource',
 };
 
 export interface BasicPageParams {
