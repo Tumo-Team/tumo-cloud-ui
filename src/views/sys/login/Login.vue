@@ -22,10 +22,18 @@
               class="w-1/2 -mt-16 -enter-x"
             />
             <div class="mt-10 font-medium text-white -enter-x">
-              <span class="inline-block mt-4 text-3xl"> {{ t('sys.login.signInTitle') }}</span>
+              <span class="inline-block mt-4 text-3xl">开箱即用的RBAC微服务脚手架</span>
             </div>
-            <div class="mt-5 font-normal text-white text-md dark:text-gray-500 -enter-x">
-              {{ t('sys.login.signInDesc') }}
+            <div class="mt-5 font-normal text-1xl text-white text-md dark:text-gray-500 -enter-x">
+              <div class="text-white">1. 基于SpringCloud2020、SpringCloud Alibaba2021</div>
+              <div class="text-white"
+                >2. 前后端分离架构，前端基于Vue3、TypeScript、Vite、AntDesignVue</div
+              >
+              <div class="text-white">3. 使用SpringSecurity OAuth2 认证授权</div>
+              <div class="text-white">4. 通过Feign进行服务间通信，@Inner保证服务间通信安全</div>
+              <div class="text-white"
+                >5. 提供基于SpringBoot的单体版本，完善的文档带你过渡Cloud开发</div
+              >
             </div>
           </div>
         </div>
@@ -59,6 +67,7 @@
 </template>
 <script lang="ts">
   import { defineComponent, computed } from 'vue';
+  import { Row, Col } from 'ant-design-vue';
 
   import { AppLogo } from '/@/components/Application';
   import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
@@ -72,6 +81,8 @@
   export default defineComponent({
     name: 'Login',
     components: {
+      [Row.name]: Row,
+      [Col.name]: Col,
       AppLogo,
       LoginForm,
       AppLocalePicker,
@@ -186,6 +197,14 @@
 
         img {
           width: 48px;
+        }
+      }
+
+      &-col:not(:last-child) {
+        padding: 0 10px;
+
+        &:not(:last-child) {
+          border-right: 1px dashed rgb(206, 206, 206, 0.5);
         }
       }
     }
