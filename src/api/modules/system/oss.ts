@@ -2,9 +2,9 @@ import { defHttp } from '/@/utils/http/axios';
 import { ApiPrefix } from '/@/api/model/baseModel';
 
 const Api = {
-  BasePageApi: `${ApiPrefix.RESOURCE_PREFIX}/oss/page`,
-  OssAddList: `${ApiPrefix.RESOURCE_PREFIX}/oss/put-list`,
-  BaseApi: `${ApiPrefix.RESOURCE_PREFIX}/oss`,
+  BasePageApi: `${ApiPrefix.UPMS_PREFIX}/oss/page`,
+  OssAddList: `${ApiPrefix.UPMS_PREFIX}/oss/put-list`,
+  BaseApi: `${ApiPrefix.UPMS_PREFIX}/oss`,
 };
 
 /**

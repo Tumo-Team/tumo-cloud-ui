@@ -41,7 +41,7 @@
 </template>
 <script lang="ts">
   import { defineComponent } from 'vue';
-  import { getOssPage, addOssList, deleteOss } from '/@/api/system/resource/oss';
+  import { getOssPage, addOssList, deleteOss } from '/@/api/modules/system/oss';
   import { uploadListApi } from '/@/api/modules/system/upload';
   import Auth from '/@/settings/constants/auth';
 
